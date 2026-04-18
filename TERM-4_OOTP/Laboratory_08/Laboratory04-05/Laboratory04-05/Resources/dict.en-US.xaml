@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="m_Catalog">Catalog</sys:String>
+    <sys:String x:Key="m_All">All products</sys:String>
+    <sys:String x:Key="m_Keyboards">Keyboards</sys:String>
+    <sys:String x:Key="m_Mice">Mice</sys:String>
+    <sys:String x:Key="m_Headphones">Headphones</sys:String>
+    <sys:String x:Key="m_Monitors">Monitors</sys:String>
+    <sys:String x:Key="m_Search">Search</sys:String>
+    <sys:String x:Key="m_Price">Price</sys:String>
+    <sys:String x:Key="m_Reset">Reset</sys:String>
+    <sys:String x:Key="m_Account">Personal account</sys:String>
+    <sys:String x:Key="m_LoginTitle">Admin login</sys:String>
+    <sys:String x:Key="m_Login">Login:</sys:String>
+    <sys:String x:Key="m_Password">Password</sys:String>
+    <sys:String x:Key="m_Enter">Enter</sys:String>
+    <sys:String x:Key="m_Cancel">Cancel</sys:String>
+    <sys:String x:Key="m_ToBasket">To basket</sys:String>
+    <sys:String x:Key="m_CurrencyFormat">${0}</sys:String>
+    <sys:String x:Key="m_Setting">Setting</sys:String>
+    <sys:String x:Key="m_ThemeSetting">Theme setting</sys:String>
+    <sys:String x:Key="m_Profile">Profile</sys:String>
+    <sys:String x:Key="m_UserName">Username</sys:String>
+    <sys:String x:Key="m_Email">Email</sys:String>
+    <sys:String x:Key="m_Basket">Basket</sys:String>
+    <sys:String x:Key="m_ProductCount">{0} products</sys:String>
+    <sys:String x:Key="m_ForPayment">For Payment</sys:String>
+    <sys:String x:Key="m_UnLogin">Leave from account</sys:String>
+    <sys:String x:Key="m_PlacingOrder">Placing an order</sys:String>
+    <sys:String x:Key="m_AdminLog">Admin</sys:String>
+    <sys:String x:Key="m_ProductManipulate">Product managment</sys:String>
+    <sys:String x:Key="m_AddProduct">Add</sys:String>
+    <sys:String x:Key="m_DeleteProduct">Delete</sys:String>
+    <sys:String x:Key="m_EditProduct">Edit</sys:String>
+    <sys:String x:Key="m_PhoneNumber">Phone number</sys:String>
+
+</ResourceDictionary>

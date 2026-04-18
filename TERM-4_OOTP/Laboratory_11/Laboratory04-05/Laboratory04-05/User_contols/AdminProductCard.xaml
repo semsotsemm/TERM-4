@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Laboratory04_05.AdminProductCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:local="clr-namespace:Laboratory04_05"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <local:ByteToImageConverter x:Key="ByteToImageConverter"/>
+    </UserControl.Resources>
+    <Border Background="{DynamicResource SecondaryColor}" 
+            Width="250" Margin="10" 
+            CornerRadius="10" Padding="15" 
+            MouseLeftButtonDown="Card_Click" 
+            Cursor="Hand"
+            BorderThickness="2"
+            BorderBrush="Transparent">
+
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+        </Border.Effect>
+
+        <Grid>
+            <StackPanel x:Name="ProductInfo">
+                <Image Source="{Binding ImagePath}" Height="150" Stretch="Uniform" Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold" Margin="0,0,0,5" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding ShortDescription}" Foreground="{DynamicResource AccentColor}" Margin="0,0,0,10" TextWrapping="Wrap" MaxHeight="40"/>
+                <TextBlock Text="{Binding Price, StringFormat={}{0} руб.}" FontSize="16" FontWeight="SemiBold"/>
+            </StackPanel>
+
+            <Border x:Name="ActionOverlay" Background="#D9FFFFFF" CornerRadius="10" Visibility="Collapsed" Margin="-15">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Content="✏️" FontSize="30" Background="Transparent" BorderThickness="0" Margin="10,0" Click="EditButton_Click" Cursor="Hand" ToolTip="Редактировать"/>
+                    <Button Content="🗑️" FontSize="30" Background="Transparent" BorderThickness="0" Margin="10,0" Click="DeleteButton_Click" Cursor="Hand" ToolTip="Удалить"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>  

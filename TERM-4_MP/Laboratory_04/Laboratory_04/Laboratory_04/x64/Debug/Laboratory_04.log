@@ -1,0 +1,7 @@
+﻿  Laboratory_04.cpp
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\Laboratory_04\Laboratory_04.cpp(30,18): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\Laboratory_04\Laboratory_04.cpp(31,18): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\Laboratory_04\Laboratory_04.cpp(66,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\Laboratory_04\Laboratory_04.cpp(67,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\Laboratory_04\Laboratory_04.cpp(100,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Laboratory_04.vcxproj -> C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\x64\Debug\Laboratory_04.exe

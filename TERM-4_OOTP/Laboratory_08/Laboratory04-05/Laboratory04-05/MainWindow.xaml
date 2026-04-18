@@ -1,0 +1,85 @@
+﻿<Window x:Class="Laboratory04_05.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:local="clr-namespace:Laboratory04_05"
+            Title="Bit" Height="800" Width="1200">
+    <Grid Background="{DynamicResource PrimaryColor}">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+  
+
+        <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Button Content="↩ Отмена" Click="Undo_Click" Margin="5 5 10 5"/>
+            <Button Content="↪ Возврат" Click="Redo_Click" Margin="5 5 70 5"/>
+        </StackPanel>
+
+        <Grid Grid.Column="0" Background="{DynamicResource SecondaryColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,20,0,0">
+                <TextBlock Text="{DynamicResource m_Catalog}" Style="{StaticResource HeaderTextBlockStyle}" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <ListBox BorderThickness="0" Background="Transparent" x:Name="UserPanel" SelectionChanged="UserPanel_SelectionChanged">
+                    <ListBoxItem Content="{DynamicResource m_All}" Tag="All" IsSelected="True"/>
+                    <ListBoxItem Content="{DynamicResource m_Keyboards}" Tag="Клавиатуры"/>
+                    <ListBoxItem Content="{DynamicResource m_Mice}" Tag="Мышки"/>
+                    <ListBoxItem Content="{DynamicResource m_Headphones}" Tag="Наушники"/>
+                    <ListBoxItem Content="{DynamicResource m_Monitors}" Tag="Мониторы"/>
+                </ListBox>
+
+                <Separator Margin="20,10" Background="LightGray"/>
+
+                <StackPanel Margin="20,0">
+                    <TextBlock Text="{DynamicResource m_Search}" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBox x:Name="SearchBox" Style="{StaticResource InputControlStyle}" Background="{DynamicResource PrimaryColor}" TextChanged="FilterElement_Changed"/>
+
+                    <TextBlock Text="{DynamicResource m_Price}" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="MinPriceBox" Grid.Column="0" Style="{StaticResource InputControlStyle}" Background="{DynamicResource PrimaryColor}" TextChanged="FilterElement_Changed"/>
+                        <TextBlock Text="-" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                        <TextBox x:Name="MaxPriceBox" Grid.Column="2" Style="{StaticResource InputControlStyle}" Background="{DynamicResource PrimaryColor}" TextChanged="FilterElement_Changed"/>
+                    </Grid>
+                    <Button Content="{DynamicResource m_Reset}" Click="ResetFilters_Click" Margin="0,5" FontSize="12" Background="Transparent" BorderThickness="0" Foreground="Gray" Cursor="Hand"/>
+                </StackPanel>
+            </StackPanel>
+            <ListBox Grid.Row="1" x:Name="AdminLinkList" BorderThickness="0" Background="Transparent" Margin="0,0,0,20">
+                <ListBoxItem Content="{DynamicResource m_Account}"  
+      Tag="Admin"  
+      FontSize="14"  
+      HorizontalContentAlignment="Center"
+      Selected="PersonalAccountSelected"/>
+            </ListBox>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="10,20,20,20">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="ProductsControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:ProductControl 
+            Rating="{Binding Rating}" 
+            Stock="{Binding Quantity}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

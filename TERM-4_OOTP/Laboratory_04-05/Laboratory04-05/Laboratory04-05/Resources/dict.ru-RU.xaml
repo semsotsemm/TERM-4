@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="m_Catalog">Каталог</sys:String>
+    <sys:String x:Key="m_All">Все товары</sys:String>
+    <sys:String x:Key="m_Keyboards">Клавиатуры</sys:String>
+    <sys:String x:Key="m_Mice">Мышки</sys:String>
+    <sys:String x:Key="m_Headphones">Наушники</sys:String>
+    <sys:String x:Key="m_Monitors">Мониторы</sys:String>
+    <sys:String x:Key="m_Search">Поиск</sys:String>
+    <sys:String x:Key="m_Price">Цена</sys:String>
+    <sys:String x:Key="m_Reset">Сбросить</sys:String>
+    <sys:String x:Key="m_Admin">Админ</sys:String>
+    <sys:String x:Key="m_LoginTitle">Вход</sys:String>
+    <sys:String x:Key="m_Login">Логин:</sys:String>
+    <sys:String x:Key="m_Password">Пароль:</sys:String>
+    <sys:String x:Key="m_Enter">Войти</sys:String>
+    <sys:String x:Key="m_Cancel">Отмена</sys:String>
+    <sys:String x:Key="m_ToBasket">В корзину</sys:String>
+    <sys:String x:Key="m_CurrencyFormat">{0} руб.</sys:String>
+</ResourceDictionary>

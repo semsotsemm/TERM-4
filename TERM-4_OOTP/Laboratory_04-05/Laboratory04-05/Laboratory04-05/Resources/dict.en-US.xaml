@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="m_Catalog">Catalog</sys:String>
+    <sys:String x:Key="m_All">All Products</sys:String>
+    <sys:String x:Key="m_Keyboards">Keyboards</sys:String>
+    <sys:String x:Key="m_Mice">Mice</sys:String>
+    <sys:String x:Key="m_Headphones">Headphones</sys:String>
+    <sys:String x:Key="m_Monitors">Monitors</sys:String>
+    <sys:String x:Key="m_Search">Search</sys:String>
+    <sys:String x:Key="m_Price">Price</sys:String>
+    <sys:String x:Key="m_Reset">Reset</sys:String>
+    <sys:String x:Key="m_Admin">Admin</sys:String>
+    <sys:String x:Key="m_LoginTitle">Admin Login</sys:String>
+    <sys:String x:Key="m_Login">Login:</sys:String>
+    <sys:String x:Key="m_Password">Password:</sys:String>
+    <sys:String x:Key="m_Enter">Enter</sys:String>
+    <sys:String x:Key="m_Cancel">Cancel</sys:String>
+    <sys:String x:Key="m_ToBasket">To Basket</sys:String>
+    <sys:String x:Key="m_CurrencyFormat">${0}</sys:String>
+</ResourceDictionary>

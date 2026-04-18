@@ -1,0 +1,167 @@
+﻿<Window x:Class="Laboratory04_05.PersonalAccount"
+        x:Name="MyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Laboratory04_05"
+        Title="Bit" Height="650" Width="1000"
+        Icon="/Images/Bit.ico"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource PrimaryColor}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{DynamicResource SecondaryColor}" CornerRadius="0,20,20,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.1"/>
+            </Border.Effect>
+
+            <StackPanel Margin="20">
+                <Button Content="← В каталог" Click="BackToCatalog_Click" 
+                        Background="Transparent" BorderThickness="0" Foreground="Gray" 
+                        HorizontalAlignment="Left" Margin="0,0,0,30" Cursor="Hand"/>
+
+                <TextBlock HorizontalAlignment="Center" Text="{DynamicResource m_Setting}" 
+                           Foreground="{DynamicResource AccentColor}" Style="{StaticResource HeaderTextBlockStyle}" Margin="0,0,0,20"/>
+
+                <TextBlock HorizontalAlignment="Center" Foreground="{DynamicResource AccentColor}" Text="Язык / Language" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,20">
+                    <Button Content="RU" Tag="ru-RU" Click="ChangeLanguage_Click" Style="{StaticResource RoundButtonStyle}" Width="50" Height="30" Margin="0,0,10,0"/>
+                    <Button Content="EN" Tag="en-US" Click="ChangeLanguage_Click" Width="50" Height="30" Style="{StaticResource RoundButtonStyle}"/>
+                </StackPanel>
+
+                <TextBlock Text="{DynamicResource m_ThemeSetting}" Foreground="{DynamicResource AccentColor}" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                <Grid Margin="0,0,0,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="‹" Click="ScrollLeft_Click" Width="30" Height="40" Background="Transparent" BorderThickness="0" FontSize="24" Cursor="Hand"/>
+
+                    <ScrollViewer x:Name="ThemeScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="ThemesPanel" Orientation="Horizontal">
+                            <Button Tag="Pink" Click="ChangeTheme_Click" Width="170" Height="130" Margin="5" Background="Transparent" BorderBrush="Transparent">
+                                <Image Source="/Images/pink_theme.png" Stretch="Uniform"/>
+                            </Button>
+                            <Button Tag="Green" Click="ChangeTheme_Click" Width="170" Height="130" Margin="5" Background="Transparent" BorderBrush="Transparent">
+                                <Image Source="/Images/green_theme.png" Stretch="Uniform"/>
+                            </Button>
+                            <Button Tag="White" Click="ChangeTheme_Click" Width="170" Height="130" Margin="5" Background="Transparent" BorderBrush="Transparent">
+                                <Image Source="/Images/white_theme.png" Stretch="Uniform"/>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <Button Grid.Column="2" Content="›" Click="ScrollRight_Click" Width="30" Height="40" Background="Transparent" BorderThickness="0" FontSize="24" Cursor="Hand"/>
+                </Grid>
+
+                <Separator Background="#F0F0F0" Margin="0,10"/>
+                <Button Content="{DynamicResource m_UnLogin}" Click="Logout_Click" Margin="0,20,0,0" Background="#FFF0F0" Foreground="Red" BorderBrush="{DynamicResource SecondaryColor}" Padding="10" Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Padding="40,20">
+            <StackPanel>
+                <TextBlock Text="{DynamicResource m_Profile}" Style="{StaticResource HeaderTextBlockStyle}" Foreground="{DynamicResource AccentColor}" Margin="0,0,0,20"/>
+
+                <Border Background="{DynamicResource SecondaryColor}" CornerRadius="15" Padding="25" Margin="0,0,0,30">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Width="100" Height="100" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="AvatarScale" ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="AvatarScale" Storyboard.TargetProperty="ScaleX" To="1.1" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="AvatarScale" Storyboard.TargetProperty="ScaleY" To="1.1" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="AvatarScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="AvatarScale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Border.Triggers>
+                            <TextBlock Text="👤" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" Margin="25,0,0,0">
+                            <TextBlock Text="{DynamicResource m_UserName}" FontWeight="Bold" Foreground="{DynamicResource AccentColor}"/>
+                            <TextBox x:Name="UserName" 
+                 TextChanged="UserName_CheckLogic"
+                 Style="{StaticResource InputControlStyle}"/>
+
+                            <TextBlock Text="{DynamicResource m_Email}" FontWeight="Bold" Foreground="{DynamicResource AccentColor}" Margin="0,10,0,0"/>
+                            <TextBox x:Name="UserEmail" Style="{StaticResource InputControlStyle}"/>
+
+                            <TextBlock Text="{DynamicResource m_PhoneNumber}" FontWeight="Bold" Foreground="{DynamicResource AccentColor}" Margin="0,10,0,0"/>
+                            <TextBox x:Name="UserPhoneNumber" Style="{StaticResource InputControlStyle}"/>
+
+                            <TextBlock Text="{DynamicResource m_Password}" FontWeight="Bold" Foreground="{DynamicResource AccentColor}" Margin="0,10,0,0"/>
+                            <PasswordBox x:Name="UserPassword" Style="{StaticResource PasswordInputControlStyle}"/>
+
+                            <Button Content="Сохранить изменения" Style="{DynamicResource DarkButtonStyle}" Click="ConfirmEdition" Margin="0,15,0,0" Width="180"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <DockPanel Margin="0,0,0,10">
+                    <TextBlock Text="{DynamicResource m_Basket}" Style="{StaticResource HeaderTextBlockStyle}" Foreground="{DynamicResource AccentColor}"/>
+                    <TextBlock x:Name="ProductCounter" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="Gray" Margin="10,0,0,5"/>
+                </DockPanel>
+
+                <Border Background="{DynamicResource SecondaryColor}" CornerRadius="15" Padding="15">
+                    <StackPanel>
+                        <ListBox x:Name="BasketItemsList" BorderBrush="{DynamicResource SecondaryColor}" Background="{DynamicResource SecondaryColor}"
+         HorizontalContentAlignment="Stretch" 
+         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <local:BasketItemCard DeleteClicked="BasketItemCard_DeleteClicked"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Separator Margin="0,15"/>
+                        <DockPanel>
+                            <TextBlock Text="{DynamicResource m_ForPayment}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource AccentColor}"/>
+                            <TextBlock x:Name="TotalProductsPrice" DockPanel.Dock="Right" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <Button Content="{DynamicResource m_PlacingOrder}" Style="{StaticResource CheckoutButtonStyle}" Click="PlacingOrder_Click" Margin="0,15,0,0" Height="40"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid x:Name="LoginOverlay" Grid.ColumnSpan="2" Visibility="Collapsed" Panel.ZIndex="1000">
+            <Border Background="#80000000">
+                <Border Background="{DynamicResource PrimaryColor}" Width="300" Padding="20" CornerRadius="15" VerticalAlignment="Center">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource m_LoginTitle}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <TextBlock Text="{DynamicResource m_Login}"/>
+                        <TextBox x:Name="LoginBox" Style="{StaticResource InputControlStyle}"/>
+                        <TextBlock Text="{DynamicResource m_Password}" Margin="0,10,0,0"/>
+                        <PasswordBox x:Name="PassBox" Style="{StaticResource PasswordInputControlStyle}"/>
+                        <Button Content="{DynamicResource m_Enter}" Click="ConfirmLogin_Click" Margin="0,20,0,0" Height="35" Style="{StaticResource DarkButtonStyle}"/>
+                        <Button Content="{DynamicResource m_Cancel}" Click="CancelLogin_Click" Background="Transparent" BorderThickness="0" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

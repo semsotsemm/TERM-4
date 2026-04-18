@@ -1,0 +1,3 @@
+﻿  Laboratory_05.cpp
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_05\Laboratory_05\Laboratory_05\Laboratory_05.cpp(11,17): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  Laboratory_05.vcxproj -> C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_05\Laboratory_05\x64\Debug\Laboratory_05.exe

@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="Laboratory04_05.BasketItemCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Laboratory04_05"
+             Focusable="True" 
+             Background="Transparent">
+    <UserControl.Resources>
+        <local:ByteToImageConverter x:Key="ByteToImageConverter"/>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:DataCommands.DeleteItem" 
+                        Executed="ExecuteDelete" 
+                        CanExecute="CanExecuteDelete" />
+    </UserControl.CommandBindings>
+
+    <Border MouseLeftButtonDown="Card_Click" 
+            Cursor="Hand" 
+            Background="{DynamicResource SecondaryColor}"
+            CornerRadius="8"
+            Margin="2">
+
+        <DockPanel LastChildFill="True" Margin="5">
+
+            <Image Source="{Binding Image, Converter={StaticResource ByteToImageConverter}}" Width="50" Height="50" DockPanel.Dock="Left" Margin="0,0,15,0"/>
+
+            <Button x:Name="DeleteBtn" 
+                    Content="🗑️" 
+                    DockPanel.Dock="Right" 
+                    Command="ApplicationCommands.Delete"
+                    Background="Transparent" 
+                    BorderThickness="0" 
+                    FontSize="20" 
+                    Foreground="Red" 
+                    VerticalAlignment="Center" 
+                    Visibility="Collapsed"/>
+
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{Binding Name}" 
+                           FontWeight="SemiBold" 
+                           Foreground="{DynamicResource AccentColor}"/>
+
+                <TextBlock Text="{Binding Price, StringFormat={}{0} руб.}" 
+                           Foreground="{DynamicResource AccentColor}"/>
+            </StackPanel>
+
+        </DockPanel>
+    </Border>
+</UserControl>

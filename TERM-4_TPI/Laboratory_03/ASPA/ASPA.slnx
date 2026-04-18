@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ASPA003/ASPA003.csproj" Id="d6d4e923-750c-41c8-8f2e-6a85f3950848" />
+  <Project Path="DAL003/DAL003.csproj" />
+  <Project Path="TEST_DAL003/TEST_DAL003.csproj" />
+</Solution>

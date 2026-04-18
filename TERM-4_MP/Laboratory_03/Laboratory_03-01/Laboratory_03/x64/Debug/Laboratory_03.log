@@ -1,0 +1,4 @@
+﻿  Laboratory_03.cpp
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_03\Laboratory_03-01\Laboratory_03\Laboratory_03.cpp(300,21): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_03\Laboratory_03-01\Laboratory_03\Laboratory_03.cpp(314,31): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  Laboratory_03.vcxproj -> C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_03\Laboratory_03-01\x64\Debug\Laboratory_03.exe

@@ -1,0 +1,8 @@
+﻿  Laboratory_04-1.cpp
+C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\Laboratory_04-1\Laboratory_04-1.cpp(58,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  Создание кода
+  1 of 200 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  Laboratory_04-1.vcxproj -> C:\Users\untermensh\Useless\Labs\TERM-4_MP\Laboratory_04\Laboratory_04\x64\Release\Laboratory_04-1.exe

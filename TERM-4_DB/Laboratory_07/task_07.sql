@@ -1,0 +1,19 @@
+use UNIVER;
+go
+
+SELECT 
+    f.FACULTY AS [Факультет], 
+    g.IDGROUP AS [Группа], 
+    COUNT(s.IDSTUDENT) AS [Количество студентов]
+FROM FACULTY f
+JOIN GROUPS g ON f.FACULTY = g.FACULTY
+LEFT JOIN STUDENT s ON g.IDGROUP = s.IDGROUP
+GROUP BY ROLLUP (f.FACULTY, g.IDGROUP);
+
+SELECT 
+    a.AUDITORIUM_TYPE AS [Тип аудитории],
+    SUBSTRING(a.AUDITORIUM, 1, 1) AS [Корпус],
+    COUNT(*) AS [Количество аудиторий],
+    SUM(a.AUDITORIUM_CAPACITY) AS [Суммарная вместимость]
+FROM AUDITORIUM a
+GROUP BY ROLLUP (a.AUDITORIUM_TYPE, SUBSTRING(a.AUDITORIUM, 1, 1));

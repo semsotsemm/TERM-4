@@ -1,0 +1,12 @@
+use UNIVER;
+go
+
+SELECT aud.AUDITORIUM_TYPE [Тип аудитории], aud.AUDITORIUM_CAPACITY [Объем аудитории], aud.AUDITORIUM_NAME [Название аудитории] 
+	FROM AUDITORIUM as aud 
+	WHERE aud.AUDITORIUM_NAME = (
+	SELECT top(1) inner_aud.AUDITORIUM_NAME
+		FROM AUDITORIUM as inner_aud
+		WHERE inner_aud.AUDITORIUM_TYPE = aud.AUDITORIUM_TYPE
+		ORDER BY inner_aud.AUDITORIUM_CAPACITY desc
+	)
+	ORDER BY aud.AUDITORIUM_CAPACITY desc;
