@@ -1,0 +1,5 @@
+﻿  Laboratory_06.cpp
+  timer.cpp
+C:\Users\untermensh\Useless\TERM-4\TERM-4_MP\Laboratory_06\Laboratory_06\Laboratory_06\timer.cpp(15,19): warning C4244: =: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Создание кода...
+  Laboratory_06.vcxproj -> C:\Users\untermensh\Useless\TERM-4\TERM-4_MP\Laboratory_06\Laboratory_06\x64\Debug\Laboratory_06.exe
