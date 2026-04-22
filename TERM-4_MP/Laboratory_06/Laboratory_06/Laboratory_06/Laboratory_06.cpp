@@ -43,8 +43,8 @@ struct AList
 {
 	vector<int> adj[SIZE];
 };
-
-void dfs(bool matrix[SIZE][SIZE], bool visited[SIZE], int u);
+	
+void dfs(bool matrix[SIZE][SIZE], bool visited[SIZE], int u, vector<int>& visited_edge);
 void topologicalSortUtil(bool matrix[SIZE][SIZE], bool visited[SIZE], stack<int>& s, int u);
 void topologicalSort(bool matrix[SIZE][SIZE]);
 void bfs(bool matrix[SIZE][SIZE], int startNode);
@@ -58,6 +58,7 @@ void kruskalMST(short graph[SIZE][SIZE]);
 int main()
 {
 	setlocale(LC_ALL, "Russian");
+	vector<int> visited_edge;
 	bool graph_matrix[SIZE][SIZE] =
 	{
 	//   0  1  2  3  4  5  6
@@ -69,46 +70,54 @@ int main()
 		{0, 0, 1, 0, 0, 0, 0},
 		{0, 0, 0, 0, 1, 1, 0},
 	};
-	bool visited[SIZE] = { false };
-
-	cout << "DFS starting from 0: ";
-	dfs(graph_matrix, visited, 0);
-	cout << endl;
-
-	cout << "BFS starting from 0: ";
-	bfs(graph_matrix, 0);
-	cout << endl;
-
-	cout << "Topological Sort: ";
-	topologicalSort(graph_matrix);
-	cout << endl;
-
-	short second_graph_matrix[SIZE][SIZE] =
+	/*
+	bool visited[SIZE] = {false};
+	
+	cout << "Обход в глубину начат с вершины 0.\n";
+	visited_edge.push_back(0);
+	dfs(graph_matrix, visited, 0, visited_edge);
+	cout << "Порядок обхода вершин: ";
+	
+	for (int i = 0; i < visited_edge.size(); i++)
 	{
-		//   0  1  2  3  4  5  6
-			{0, 8, 0, 0, 0, 0, 0},
-			{0, 0, 0, 11, 5, 0, 0},
-			{0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 9, 0, 0, 0, 9},
-			{0, 0, 0, 0, 0, 0, 0},
-			{0, 0, 10, 0, 0, 0, 0},
-			{0, 0, 0, 0, 2, 6, 0},
-	};
+		cout << visited_edge[i];
+		if (i < visited_edge.size() - 1)
+		{
+			cout << ", ";
+		}
+		else
+		{
+			cout << '.';
+		}
+	}
+	*/
 
-	primMST(second_graph_matrix);
-	kruskalMST(second_graph_matrix);
+	//cout << "Обход в ширину начат с вершины 0. ";
+	//bfs(graph_matrix, 0);
+	//cout << endl;
+
+	cout << "Топологическая сортировка: ";
+	topologicalSort(graph_matrix);
+	cout << "null" << endl;
+
+
+	//primMST(second_graph_matrix);
+	//kruskalMST(second_graph_matrix);
 	return 0;
 }
 
-void dfs(bool matrix[SIZE][SIZE], bool visited[SIZE], int u) {
+void dfs(bool matrix[SIZE][SIZE], bool visited[SIZE], int u, vector<int>& visited_edge) {
 	visited[u] = true;
+
 	cout << "Посетили узел: " << u << endl;
 
 	for (int v = 0; v < SIZE; v++)
 	{
 		if (matrix[u][v] && !visited[v])
 		{
-			dfs(matrix, visited, v);
+			visited_edge.push_back(v);
+			dfs(matrix, visited, v, visited_edge);
+
 		}
 	}
 }
@@ -116,6 +125,7 @@ void dfs(bool matrix[SIZE][SIZE], bool visited[SIZE], int u) {
 void bfs(bool matrix[SIZE][SIZE], int startNode) {
 	bool visited[SIZE] = { false };
 	queue<int> q;
+	vector<int> visited_edge;
 
 	visited[startNode] = true;
 	q.push(startNode);
@@ -124,7 +134,7 @@ void bfs(bool matrix[SIZE][SIZE], int startNode) {
 	{
 		int u = q.front();
 		q.pop();
-		cout << u << " ";
+		cout  << "Посещена вершина: " << u << "\n";
 
 		for (int v = 0; v < SIZE; v++) 
 		{
@@ -132,7 +142,22 @@ void bfs(bool matrix[SIZE][SIZE], int startNode) {
 			{
 				visited[v] = true;
 				q.push(v);
+				visited_edge.push_back(v);
 			}
+		}
+	}
+	
+	cout << "Порядок обхода вершин: ";
+	for (int i = 0; i < visited_edge.size(); i++)
+	{
+		cout << visited_edge[i];
+		if (i < visited_edge.size() - 1)
+		{
+			cout << ", ";
+		}
+		else 
+		{
+			cout << '.';
 		}
 	}
 }
@@ -163,7 +188,7 @@ void topologicalSort(bool matrix[SIZE][SIZE]) {
 
 	while (!s.empty()) 
 	{
-		cout << s.top() << " ";
+		cout << s.top() << "->";
 		s.pop();
 	}
 }
