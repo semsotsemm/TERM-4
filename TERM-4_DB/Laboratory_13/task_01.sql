@@ -1,8 +1,6 @@
 use UNIVER;
 go
 
-set nocount on
-
 CREATE PROCEDURE PSUBJECT
 as begin 
 	declare @line_counter int = (SELECT count(*) FROM SUBJECT);

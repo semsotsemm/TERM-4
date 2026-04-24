@@ -1,6 +1,7 @@
 USE UNIVER;
 GO
 
+
 PRINT 'Начальный уровень вложенности: ' + CAST(@@TRANCOUNT AS VARCHAR);
 
 BEGIN TRANSACTION OuterTran;
