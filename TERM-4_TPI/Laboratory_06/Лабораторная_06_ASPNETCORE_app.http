@@ -1,81 +1,81 @@
 ### 
-@hp=http://localhost:5204
+@hp=https://localhost:7125
 @capi=/api/Celebrities
 ###
 
 
-###  все знаменитости
+###  пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ###  celebrities.MapGet("/", 
 GET {{hp}}{{capi}} 
 
-### знаменитость по ID
+### пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ID
 ### MapGet("/{id:int:min(1)}"
 GET {{hp}}{{capi}}/7
 
-### знаменитость  по ID события 
+### пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅ ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 ### MapGet("/Lifeevents/{id:int:min(1)}"
 GET {{hp}}{{capi}}/Lifeevents/7
 
-###  удалить знаменитость  по ID
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅ ID
 ###.MapDelete("/{id:int:min(1)}",
 DELETE {{hp}}{{capi}}/4
 
 
-###  добавить новую знаменитость 
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 ###  MapPost("/",
 POST {{hp}}{{capi}}
 Content-Type:application/json
 
   {
-    "fullName":    "Ершов Андрей",
+    "fullName":    "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
     "nationality": "RU",
     "reqPhotoPath":"Ershov.jpg"
   }
 
-###  изменить знаменитость по ID  
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ID  
 ###  MapPut("/{id:int:min(1)}", 
 PUT {{hp}}{{capi}}/13
 Content-Type:application/json
 
  {
-    "fullName":    "Ершов Андрей Петрович",
+    "fullName":    "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
     "nationality": "RU",
     "reqPhotoPath":"Ershov.jpg"
   }
 
 
-### получить файл фотографии по имени файла (fname)
+### пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (fname)
 ### MapGet("/photo/{fname}"
 GET {{hp}}{{capi}}/photo/Ershov.jpg
 
 
 ### 
-@lapi=/api/Lifeevents
+@lapi=/api/Liveevents
 ###
 
-###  все события 
+###  пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 ###  MapGet("/",
 GET {{hp}}{{lapi}}
 
 
 
-###  событие по ID
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ID
 ###  MapGet("/{id:int:min(1)}"
 GET {{hp}}{{lapi}}/10
 
 
-###  все события по ID знаменитости  
+###  пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  
 ###  MapGet("/Celebrities/{id:int:min(1)}
 GET {{hp}}{{lapi}}/Celebrities/3
 
 
-###  удалить событие  по ID
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅ ID
 ###  MapDelete("/{id:int:min(1)}"
 DELETE {{hp}}{{lapi}}/10
 
 
 
-###  добавить новое событие 
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 ###  MapPost("/", 
 POST {{hp}}{{lapi}}
 Content-Type:application/json
@@ -83,11 +83,11 @@ Content-Type:application/json
 {
     "celebrityId": 13,
     "date": "1931-04-19T00:00:00",
-    "description": "Дата рождения",
+    "description": "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
     "reqPhotoPath": null
  }
 
-###  изменить событие по ID 
+###  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ID 
 ###  MapPut("/{id:int:min(1)}"
 PUT {{hp}}{{lapi}}/24 
 Content-Type:application/json
@@ -95,7 +95,7 @@ Content-Type:application/json
 {
     "celebrityId": 13,
     "date": "1931-04-19T00:00:00",
-    "description": "Дата рождения. Москва.",
+    "description": "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ.",
     "reqPhotoPath": null
 }
 

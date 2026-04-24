@@ -1,0 +1,14 @@
+USE UNIVER;
+GO
+
+BEGIN TRANSACTION;
+
+UPDATE AUDITORIUM 
+SET AUDITORIUM_CAPACITY = 999 
+WHERE AUDITORIUM = '301-1';
+
+print('Данные обновлены');
+WAITFOR DELAY '00:00:10'; 
+
+ROLLBACK; 
+print('Транзакция отменена');

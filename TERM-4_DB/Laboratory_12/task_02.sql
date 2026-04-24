@@ -1,29 +1,24 @@
-USE UNIVER;
-GO
+-- Атомарность явной транзакции --
 
-BEGIN TRY
-    BEGIN TRANSACTION; 
+use UNIVER;
+go
 
-        INSERT INTO GROUPS (IDGROUP, FACULTY, PROFESSION, YEAR_FIRST)
-        VALUES (99, 'ИТ', '1-40 01 02', 2024);
+set nocount on;
 
-        UPDATE PROGRESS 
-        SET NOTE = 15 
-        WHERE IDSTUDENT = 1000 AND SUBJECT = 'ОАиП';
-
-        DELETE FROM AUDITORIUM WHERE AUDITORIUM = '423-1';
-    
-    COMMIT TRANSACTION;
-END TRY
-
-BEGIN CATCH
-    IF @@TRANCOUNT > 0
-        ROLLBACK TRANSACTION;
-
-    PRINT 'Ошибка: ' + ERROR_MESSAGE();
-    PRINT 'Номер ошибки: ' + CAST(ERROR_NUMBER() AS VARCHAR);
-    PRINT 'Строка: ' + CAST(ERROR_LINE() AS VARCHAR);
-END CATCH;
-
-SELECT * FROM GROUPS WHERE IDGROUP = 99;
-GO
+begin try
+	begin tran
+		INSERT into TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+					Values('БПЛБ', 'Белодед Николай Иванович', null, 'ИСиТ');
+		INSERT into TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+					Values('БПЛБ', 1, null, 'ПИ');
+	commit tran;	
+end try
+begin catch
+	print('Ошибка ' + cast(error_number() as varchar(5)) + ': ' + error_message())
+	DECLARE @beloded_count int = (SELECT count(*)
+		FROM TEACHER as t
+		WHERE t.TEACHER_NAME = 'Белодед Николай Иванович');
+	print('Количество Белодедов: ' + CAST(@beloded_count as varchar(3)));
+	if @@trancount > 0 rollback tran;
+    DELETE FROM TEACHER where TEACHER_NAME = 'Белодед Николай Иванович';
+end catch;

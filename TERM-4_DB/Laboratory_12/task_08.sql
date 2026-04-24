@@ -1,40 +1,31 @@
 USE UNIVER;
 GO
 
-BEGIN TRANSACTION;
-    PRINT 'Уровень вложенности: ' + CAST(@@TRANCOUNT AS VARCHAR);
+PRINT 'Начальный уровень вложенности: ' + CAST(@@TRANCOUNT AS VARCHAR);
 
-    INSERT INTO AUDITORIUM_TYPE (AUDITORIUM_TYPE, AUDITORIUM_TYPENAME)
-    VALUES ('внеш', 'внешняя транзакция');
+BEGIN TRANSACTION OuterTran;
+    PRINT 'Открыта внешняя транзакция. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
 
-    BEGIN TRANSACTION;
-        PRINT 'уровень вложенности: ' + CAST(@@TRANCOUNT AS VARCHAR);
+    INSERT INTO PULPIT (PULPIT, PULPIT_NAME, FACULTY)
+    VALUES ('ИТС', 'Информационные технологии в строительстве', 'ИТ');
 
-        INSERT INTO AUDITORIUM_TYPE (AUDITORIUM_TYPE, AUDITORIUM_TYPENAME)
-        VALUES ('внутр', 'внутренняя транзакция');
+    BEGIN TRANSACTION InnerTran;
+        PRINT 'Открыта вложенная транзакция. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
 
-    COMMIT TRANSACTION; 
-    PRINT 'уровень вложенности: ' + CAST(@@TRANCOUNT AS VARCHAR);
+        INSERT INTO AUDITORIUM (AUDITORIUM, AUDITORIUM_TYPE, AUDITORIUM_CAPACITY, AUDITORIUM_NAME)
+        VALUES ('100-1', 'ЛК', 50, 'Вложенная аудитория');
 
-COMMIT TRANSACTION;
-PRINT 'итоговый уровень: ' + CAST(@@TRANCOUNT AS VARCHAR);
+        COMMIT TRANSACTION InnerTran;
+        PRINT 'Выполнен COMMIT вложенной транзакции. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
 
-SELECT * FROM AUDITORIUM_TYPE WHERE AUDITORIUM_TYPE IN ('внеш', 'внутр');
-GO
+    SELECT * FROM PULPIT WHERE PULPIT = 'ИТС';
+    SELECT * FROM AUDITORIUM WHERE AUDITORIUM = '100-1';
 
-BEGIN TRANSACTION;
-    INSERT INTO AUDITORIUM_TYPE (AUDITORIUM_TYPE, AUDITORIUM_TYPENAME) 
-    VALUES ('тест', 'шаг 1');
+PRINT 'Откатываем ВНЕШНЮЮ транзакцию...';
+ROLLBACK TRANSACTION OuterTran; 
 
-    BEGIN TRANSACTION; 
-        INSERT INTO AUDITORIUM_TYPE (AUDITORIUM_TYPE, AUDITORIUM_TYPENAME) 
-        VALUES ('тест', 'шаг 2');
+PRINT 'После ROLLBACK внешней транзакции. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
 
-        PRINT 'попытка отката внутри';
-        ROLLBACK TRANSACTION; 
-
-    IF @@TRANCOUNT > 0 COMMIT TRANSACTION;
-
-PRINT '@@TRANCOUNT после ролбека: ' + CAST(@@TRANCOUNT AS VARCHAR);
-SELECT * FROM AUDITORIUM_TYPE WHERE AUDITORIUM_TYPE LIKE 'тест%';
-GO
+SELECT 'Кафедра' as Entity, PULPIT FROM PULPIT WHERE PULPIT = 'ИТС'
+UNION ALL
+SELECT 'Аудитория', AUDITORIUM FROM AUDITORIUM WHERE AUDITORIUM = '100-1';

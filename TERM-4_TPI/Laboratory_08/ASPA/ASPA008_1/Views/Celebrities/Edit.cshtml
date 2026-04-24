@@ -1,0 +1,10 @@
+@model ASPA008_1.Models.CelebrityFormModel
+
+<div class="card-box">
+    <div class="d-flex align-items-center gap-3">
+        <img class="preview-photo" src="@($"/Photos/{Model.ExistingPhotoPath}")" alt="@Model.FullName" />
+        <div class="flex-grow-1">
+            <partial name="_CelebrityForm" model="Model" />
+        </div>
+    </div>
+</div>

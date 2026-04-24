@@ -1,0 +1,30 @@
+@model ASPA008_1.Models.ConfirmCelebrityViewModel
+
+<div class="card-box">
+    <div class="d-flex align-items-center gap-3">
+        <img class="preview-photo" src="@($"/Photos/{Model.ReqPhotoPath}")" alt="@Model.FullName" />
+        <div class="flex-grow-1">
+            <div class="row g-2 mb-2">
+                <div class="col-8">
+                    <input class="form-control" value="@Model.FullName" readonly />
+                </div>
+                <div class="col-4">
+                    <input class="form-control" value="@Model.Nationality" readonly />
+                </div>
+            </div>
+            @using (Html.BeginForm("DeleteHumanConfirm", "Celebrities", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Id)
+                <div class="row g-2">
+                    <div class="col-12">
+                        <button class="btn btn-outline-dark w-100" type="submit">DELETE CONFIRMATION</button>
+                    </div>
+                    <div class="col-12">
+                        <a class="btn btn-outline-dark w-100" href="@Url.Action("Human", "Celebrities", new { id = Model.Id })">CANCEL</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

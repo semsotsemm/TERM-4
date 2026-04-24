@@ -1,0 +1,6 @@
+{
+  "Celebrities": {
+    "PhotoFolder": "C:\\Users\\untermensh\\Useless\\TERM-4\\TERM-4_TPI\\Laboratory_06\\ASPA\\ASPA006_1\\wwwroot\\photo",
+    "ConnectionString": "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=CelebrityDB;Integrated Security=True;TrustServerCertificate=True;"
+  }
+}

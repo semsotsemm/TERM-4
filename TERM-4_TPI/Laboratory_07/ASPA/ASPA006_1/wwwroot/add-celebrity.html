@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Celebrity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <h1>Celebrities Dictionary Internet Service</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="lifeevents.html">Life Events</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        <h2>New Celebrity</h2>
+
+        <div class="add-form-card">
+            <div class="add-form-photo">
+                <img id="preview-img" src="/api/Celebrities/photo/diamond.png" alt="Photo preview">
+            </div>
+            <div class="add-form-fields">
+                <div class="field-row">
+                    <input type="text" id="input-name" placeholder="Celebrities Name">
+                    <input type="text" id="input-nationality" placeholder="Nation" maxlength="10">
+                </div>
+                <div class="field-row upload-row">
+                    <label id="upload-label">
+                        Загрузите фото
+                        <input type="file" id="photo-file" accept="image/*" style="display:none">
+                    </label>
+                </div>
+                <div class="field-row btn-row">
+                    <button id="btn-ok" onclick="submitCelebrity()">OK</button>
+                    <button id="btn-cancel" onclick="window.location.href='index.html'">CANCEL</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="form-error" class="form-error" style="display:none"></div>
+    </main>
+
+    <script>
+    let uploadedFileName = null;
+
+    document.getElementById('photo-file').addEventListener('change', async function() {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('preview-img').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        try {
+            const res = await fetch('/api/Celebrities/upload-photo', {
+                method: 'POST',
+                body: formData
+            });
+            if (res.ok) {
+                const data = await res.json();
+                uploadedFileName = data.fileName;
+            } else {
+                uploadedFileName = file.name;
+            }
+        } catch {
+            uploadedFileName = file.name;
+        }
+    });
+
+    async function submitCelebrity() {
+        const name = document.getElementById('input-name').value.trim();
+        const nationality = document.getElementById('input-nationality').value.trim();
+        const errEl = document.getElementById('form-error');
+
+        if (!name || !nationality) {
+            errEl.textContent = 'Please fill in both Name and Nationality.';
+            errEl.style.display = 'block';
+            return;
+        }
+
+        errEl.style.display = 'none';
+
+        const payload = {
+            fullName: name,
+            nationality: nationality,
+            reqPhotoPath: uploadedFileName || 'diamond.png'
+        };
+
+        try {
+            const res = await fetch('/api/Celebrities/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok || res.status === 201) {
+                window.location.href = 'index.html';
+            } else {
+                const err = await res.json().catch(() => ({}));
+                errEl.textContent = err.Message || 'Error saving celebrity.';
+                errEl.style.display = 'block';
+            }
+        } catch (e) {
+            errEl.textContent = 'Network error: ' + e.message;
+            errEl.style.display = 'block';
+        }
+    }
+    </script>
+</body>
+</html>

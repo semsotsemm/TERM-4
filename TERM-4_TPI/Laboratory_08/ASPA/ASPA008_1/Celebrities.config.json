@@ -1,0 +1,8 @@
+{
+  "Celebrities": {
+    "PhotosRequestPath": "/Photos",
+    "PhotoFolder": "Photos",
+    "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=CelebrityDB;Trusted_Connection=True;TrustServerCertificate=True;",
+    "ISO3166alpha2Path": "ContryCodes/Лабораторная_08__iso3166-1-alpha2-country-codes.json"
+  }
+}

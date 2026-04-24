@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Celebrity Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <h1>Celebrities Dictionary Internet Service</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="lifeevents.html">Life Events</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        <div id="celebrity-detail" class="detail-page">
+            <p>Loading...</p>
+        </div>
+    </main>
+
+    <script>
+    async function loadDetail() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (!id) { window.location.href = 'index.html'; return; }
+
+        const [celebRes, eventsRes] = await Promise.all([
+            fetch(`/api/Celebrities/${id}`),
+            fetch(`/api/Liveevents/Celebrities/${id}`)
+        ]);
+
+        const celeb = await celebRes.json();
+        const events = await eventsRes.json();
+
+        const name = celeb.fullName || celeb.FullName;
+        const nationality = celeb.nationality || celeb.Nationality;
+        const photoFile = celeb.reqPhotoPath || celeb.ReqPhotoPath;
+        const photoUrl = `/api/Celebrities/photo/${photoFile}`;
+
+        document.title = name + ' — Celebrities';
+
+        const container = document.getElementById('celebrity-detail');
+        container.innerHTML = `
+            <button class="back-btn" onclick="history.back()">← Back</button>
+            <div class="detail-card">
+                <div class="detail-photo">
+                    <img src="${photoUrl}" alt="${name}">
+                </div>
+                <div class="detail-info">
+                    <h2>${name}</h2>
+                    <p class="nationality">Nationality: <strong>${nationality}</strong></p>
+                    <h3>Life Events</h3>
+                    <table class="events-table">
+                        <thead>
+                            <tr><th>Date</th><th>Event</th></tr>
+                        </thead>
+                        <tbody>
+                            ${events.map(ev => {
+                                const dateStr = ev.date || ev.Date || '';
+                                const desc = ev.description || ev.Description || '';
+                                const formatted = dateStr ? new Date(dateStr).toLocaleDateString('en-GB') : '—';
+                                return `<tr><td>${formatted}</td><td>${desc}</td></tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDetail);
+    </script>
+</body>
+</html>

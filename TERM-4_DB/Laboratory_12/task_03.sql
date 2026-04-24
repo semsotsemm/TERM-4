@@ -1,36 +1,33 @@
-USE UNIVER;
-GO
+-- Контрольная точка в явной транзакции --
 
-BEGIN TRY
-    BEGIN TRANSACTION;
+use UNIVER;
+go
 
-        INSERT INTO AUDITORIUM_TYPE (AUDITORIUM_TYPE, AUDITORIUM_TYPENAME)
-        
-        VALUES ('тест 1', 'лк');
+DECLARE @SavePoint nvarchar(20) = 'SavePoint';
 
-        SAVE TRANSACTION Point1;
+set nocount on;
 
-        INSERT INTO AUDITORIUM (AUDITORIUM, AUDITORIUM_TYPE, AUDITORIUM_CAPACITY, AUDITORIUM_NAME)
-        Values('999-9', 'тест 1', 500, 'ошибока');
+begin try
+	begin tran
+		INSERT into TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+					Values('БПЛБ', 'Белодед Николай Иванович', null, 'ИСиТ');
+		save tran @SavePoint;
+		INSERT into TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+					Values('БПЛБ', 1, null, 'ПИ');
+	commit tran;	
+end try
+begin catch
+    print('Ошибка ' + cast(error_number() as varchar(5)) + ': ' + error_message())
+    print('Откат к контрольной точке')
+    
+    if @@trancount > 0 begin
+        ROLLBACK TRANSACTION @SavePoint;
+        COMMIT TRANSACTION;             
+    end;
 
-    COMMIT TRANSACTION;
-END TRY
-
-BEGIN CATCH
-    PRINT ERROR_MESSAGE();
-
-    IF XACT_STATE() = 1
-    BEGIN
-        ROLLBACK TRANSACTION Point1; 
-        
-        COMMIT TRANSACTION; 
-    END
-    ELSE
-    BEGIN
-        ROLLBACK TRANSACTION;
-    END
-END CATCH;
-
-SELECT * FROM AUDITORIUM_TYPE WHERE AUDITORIUM_TYPE = 'тест 1';
-SELECT * FROM AUDITORIUM WHERE AUDITORIUM = '999-9';
-GO
+    DECLARE @beloded_count int = (SELECT count(*)
+        FROM TEACHER as t
+        WHERE t.TEACHER_NAME = 'Белодед Николай Иванович');
+    print('Количество Белодедов: ' + CAST(@beloded_count as varchar(3)));
+    DELETE FROM TEACHER where TEACHER_NAME = 'Белодед Николай Иванович'
+end catch;

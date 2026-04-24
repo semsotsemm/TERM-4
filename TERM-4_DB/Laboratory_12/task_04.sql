@@ -1,29 +1,26 @@
-USE UNIVER;
-GO
+use UNIVER;
+go
 
-BEGIN TRANSACTION;
-    UPDATE STUDENT SET NAME = 'имя' WHERE IDGROUP = 22;
-    PRINT 'данные изменены.';
+set nocount on;
+
+begin try
+	begin tran
+		INSERT into TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+					Values('БПЛБ', 'Белодед Николай Иванович', null, 'ИСиТ');
+		
+		WAITFOR DELAY '00:00:10';
+		
+		INSERT into TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+					Values('БПЛБ', 1, null, 'ПИ');
+	commit tran;	
+end try
+begin catch
+	print('Ошибка ' + cast(error_number() as varchar(5)) + ': ' + error_message())
+	DECLARE @beloded_count int = (SELECT count(*)
+		FROM TEACHER as t
+		WHERE t.TEACHER_NAME = 'Белодед Николай Иванович');
+	print('Количество Белодедов: ' + CAST(@beloded_count as varchar(3)));
     
-    WAITFOR DELAY '00:00:07'; 
-ROLLBACK TRANSACTION; 
-PRINT 'ролбек';
-
-BEGIN TRANSACTION;
-    UPDATE STUDENT SET NAME = 'обновленный' WHERE NAME = 'Пугач Михаил Навальный';
-    INSERT INTO STUDENT (IDGROUP, NAME, BDAY) VALUES (22, 'имя', '2005-01-01');
-COMMIT TRANSACTION; 
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
-BEGIN TRANSACTION;
-    UPDATE STUDENT SET NAME = 'грязные данные' WHERE IDGROUP = 22;
-    
-    WAITFOR DELAY '00:00:05'; 
-ROLLBACK TRANSACTION;
-PRINT 'ролбек';
-
-BEGIN TRANSACTION;
-    INSERT INTO STUDENT (IDGROUP, NAME, BDAY) 
-    VALUES (22, 'имя', '2000-01-01');
-COMMIT TRANSACTION;
+	if @@trancount > 0 rollback tran;
+    DELETE FROM TEACHER where TEACHER_NAME = 'Белодед Николай Иванович';
+end catch;

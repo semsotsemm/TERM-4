@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Celebrities Dictionary Internet Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <h1>Celebrities Dictionary Internet Service</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="lifeevents.html">Life Events</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        <div class="grid-container" id="celebrity-grid">
+            <div class="celeb-item add-card">
+                <img src="./photo/diamond.png" alt="Add Celebrity" title="Add New Celebrity">
+            </div>
+        </div>
+    </main>
+
+    <script>
+    async function loadCelebrities() {
+        const grid = document.getElementById('celebrity-grid');
+        try {
+            const response = await fetch('/api/Celebrities/data');
+            const celebrities = await response.json();
+            renderGrid(celebrities);
+        } catch (error) {
+            console.error("Ошибка загрузки данных:", error);
+        }
+    }
+
+    function renderGrid(data) {
+        const grid = document.getElementById('celebrity-grid');
+        grid.innerHTML = '';
+
+        // Diamond "Add" card — first
+        const addCard = document.createElement('div');
+        addCard.className = 'celeb-item add-card';
+        addCard.innerHTML = `<img src="./photo/diamond.png" alt="Add Celebrity" title="Add New Celebrity">`;
+        addCard.addEventListener('click', () => {
+            window.location.href = 'add-celebrity.html';
+        });
+        grid.appendChild(addCard);
+
+        data.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'celeb-item';
+
+            const id = item.id || item.Id;
+            const name = item.fullName || item.FullName;
+            const fileName = item.reqPhotoPath || item.ReqPhotoPath;
+            const photoUrl = `/api/Celebrities/photo/${fileName}`;
+
+            div.innerHTML = `
+                <img src="${photoUrl}" alt="${name}" title="${name}">
+                <div class="celeb-name">${name}</div>
+            `;
+            div.addEventListener('click', () => {
+                window.location.href = `celebrity.html?id=${id}`;
+            });
+            grid.appendChild(div);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCelebrities);
+    </script>
+</body>
+</html>

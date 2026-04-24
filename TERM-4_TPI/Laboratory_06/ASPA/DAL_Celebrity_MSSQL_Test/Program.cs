@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Options;
 using static DAL_Celebrity.DAL_Celebrity_MSSQL;
 
 namespace DAL_Celebrity;
@@ -8,40 +7,38 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        // 1. Строка подключения
         string CS = @"Server=(localdb)\mssqllocaldb;Database=CelebrityDB;Trusted_Connection=True;TrustServerCertificate=True;";
-        // 2. Инициализация БД (создание таблиц и начальных данных)
         Init init = new Init(CS);
         Init.Execute(delete: true, create: true);
+        var config = new CelebritiesConfig
+        {
+            ConnectionString = CS,
+            PhotoFolder = "wwwroot/photo" 
+        };
 
-        // 3. Лямбда-выражения для красивого вывода в консоль
+        IOptions<CelebritiesConfig> options = Options.Create(config);
+
         Func<Celebrity, string> printC = (c) => $"Id = {c.Id}, FullName = {c.FullName}, Nationality = {c.Nationality}, ReqPhotoPath = {c.ReqPhotoPath}";
         Func<Liveevent, string> printL = (l) => $"Id = {l.Id}, CelebrityId = {l.CelebrityId}, Date = {l.Date:d}, Description = {l.Description}, ReqPhotoPath = {l.ReqPhotoPath}";
         Func<string, string> puri = (string f) => $"{f}";
 
-        // 4. Тестирование Репозитория
-        using (IRepository repo = new Repository(CS))
+        using (IRepository repo = new Repository(options))
         {
-            // --- GetAllCelebrities ---
             Console.WriteLine("\n------ GetAllCelebrities() ----------");
             repo.GetAllCelebrities().ForEach(celebrity => Console.WriteLine(printC(celebrity)));
 
-            // --- GetAllLiveevents ---
             Console.WriteLine("\n------ GetAllLiveevents() -----------");
             repo.GetAllLiveevents().ForEach(life => Console.WriteLine(printL(life)));
 
-            // --- AddCelebrity (Albert Einstein) ---
             Console.WriteLine("\n------ AddCelebrity() ---------------");
             Celebrity c1 = new Celebrity { FullName = "Albert Einstein", Nationality = "DE", ReqPhotoPath = puri("Einstein.jpg") };
             if (repo.AddCelebrity(c1)) Console.WriteLine($"OK: AddCelebrity: {printC(c1)}");
             else Console.WriteLine($"ERROR: AddCelebrity: {printC(c1)}");
 
-            // --- AddCelebrity (Samuel Huntington) ---
             Celebrity c2 = new Celebrity { FullName = "Samuel Huntington", Nationality = "US", ReqPhotoPath = puri("Huntington.jpg") };
             if (repo.AddCelebrity(c2)) Console.WriteLine($"OK: AddCelebrity: {printC(c2)}");
             else Console.WriteLine($"ERROR: AddCelebrity: {printC(c2)}");
 
-            // --- DelCelebrity (Einstein) ---
             Console.WriteLine("\n------ DelCelebrity() ---------------");
             int idEinstein = repo.GetCelebrityIdByName("Albert Einstein");
             if (idEinstein > 0)
@@ -51,7 +48,6 @@ internal class Program
             }
             else Console.WriteLine("ERROR: GetCelebrityIdByName (Einstein)");
 
-            // --- UpdCelebrity (Huntington) ---
             Console.WriteLine("\n------ UpdCelebrity() ---------------");
             int idHunt = repo.GetCelebrityIdByName("Samuel Huntington");
             if (idHunt > 0)
@@ -59,7 +55,7 @@ internal class Program
                 Celebrity? cToUpd = repo.GetCelebrityById(idHunt);
                 if (cToUpd != null)
                 {
-                    cToUpd.Nationality = "USA"; // Меняем данные
+                    cToUpd.Nationality = "USA"; 
                     if (repo.UpdCelebrity(idHunt, cToUpd)) Console.WriteLine($"OK: UpdCelebrity: {printC(cToUpd)}");
                     else Console.WriteLine($"ERROR: UpdCelebrity: {idHunt}");
                 }
@@ -67,7 +63,6 @@ internal class Program
             }
             else Console.WriteLine("ERROR: GetCelebrityIdByName (Huntington)");
 
-            // --- AddLiveevent ---
             Console.WriteLine("\n------ AddLiveevent() ---------------");
             int idHuntEvent = repo.GetCelebrityIdByName("Samuel Huntington");
             if (idHuntEvent > 0)
@@ -77,7 +72,6 @@ internal class Program
                 else Console.WriteLine("ERROR: AddLiveevent");
             }
 
-            // --- GetLifeeventsByCelebrityId ---
             Console.WriteLine("\n------ GetLifeeventsByCelebrityId ---");
             int idHuntEvents = repo.GetCelebrityIdByName("Samuel Huntington");
             if (idHuntEvents > 0)
@@ -86,9 +80,8 @@ internal class Program
                     Console.WriteLine($"OK: GetLifeeventsByCelebrityId, {idHuntEvents}, {printL(l)}"));
             }
 
-            // --- GetCelebrityByLiveeventId ---
             Console.WriteLine("\n------ GetCelebrityByLiveeventId ---");
-            int eventId = 1; // Например, самое первое событие в БД
+            int eventId = 1; 
             Celebrity? foundC = repo.GetCelebrityByLiveeventId(eventId);
             if (foundC != null) Console.WriteLine($"OK: {printC(foundC)}");
             else Console.WriteLine($"ERROR: GetCelebrityByLiveeventId, {eventId}");

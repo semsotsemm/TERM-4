@@ -1,0 +1,14 @@
+﻿@model ASPA008_1.Models.IndexViewModel
+
+@section subhead
+{
+    <h2>Celebrities</h2>
+}
+
+<div class="photos-grid">
+    @Html.CelebrityPhoto(0, "New Celebrity", $"{Model.PhotosRequestPath}/diamond.png")
+    @foreach (var celebrity in Model.Celebrities)
+    {
+        @Html.CelebrityPhoto(celebrity.Id, celebrity.FullName, $"{Model.PhotosRequestPath}/{celebrity.ReqPhotoPath}")
+    }
+</div>

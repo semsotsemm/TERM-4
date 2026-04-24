@@ -1,0 +1,38 @@
+@using ANC25_WEBAPI_DLL
+@using Microsoft.AspNetCore.Mvc.Rendering
+@inject CountryCodes Countries
+@model ASPA008_1.Models.CelebrityFormModel
+@{
+    var countries = new SelectList((List<CountryItem>)Countries, "code", "countryLabel", Model.Nationality);
+}
+
+@using (Html.BeginForm(Model.SubmitAction, "Celebrities", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.ExistingPhotoPath)
+
+    <div class="row g-2 mb-2">
+        <div class="col-8">
+            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", placeholder = "Celebrities Name" })
+            @Html.ValidationMessageFor(m => m.FullName)
+        </div>
+        <div class="col-4">
+            @Html.DropDownListFor(m => m.Nationality, countries, new { @class = "form-select" })
+            @Html.ValidationMessageFor(m => m.Nationality)
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <input id="upload" name="upload" type="file" accept="image/jpeg,image/png" class="form-control" @(Model.RequirePhoto ? "required" : "") />
+    </div>
+
+    <div class="row g-2">
+        <div class="col-6">
+            <button class="btn btn-outline-dark w-100" type="submit">OK</button>
+        </div>
+        <div class="col-6">
+            <a class="btn btn-outline-dark w-100" href="@Url.Action("Index", "Celebrities")">CANCEL</a>
+        </div>
+    </div>
+}

@@ -1,7 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using static DAL_Celebrity.DAL_Celebrity_MSSQL;
+using Microsoft.Extensions.Options;
 
 namespace DAL_Celebrity;
+
+public class CelebritiesConfig
+{
+    public string PhotoFolder { get; set; } = string.Empty;
+    public string ConnectionString { get; set; } = string.Empty;
+}
 
 public class DAL_Celebrity_MSSQL
 {
@@ -35,10 +41,16 @@ public class DAL_Celebrity_MSSQL
     public class Repository : IRepository
     {
         private readonly Context context;
+        private readonly string _photoFolder;
 
-        public Repository(string connectionString)
+        public Repository(IOptions<CelebritiesConfig> options)
         {
+            var config = options.Value;
+
+            var connectionString = config.ConnectionString;
+
             context = new Context(connectionString);
+            _photoFolder = config.PhotoFolder;
         }
 
 
@@ -187,7 +199,7 @@ public class DAL_Celebrity_MSSQL
             model_builder.Entity<Celebrity>().ToTable("Celebrities").HasKey(p => p.Id);
             model_builder.Entity<Celebrity>().Property(p => p.Id).IsRequired();
             model_builder.Entity<Celebrity>().Property(p => p.FullName).IsRequired().HasMaxLength(50);
-            model_builder.Entity<Celebrity>().Property(p => p.Nationality).IsRequired().HasMaxLength(2);
+            model_builder.Entity<Celebrity>().Property(p => p.Nationality).IsRequired().HasMaxLength(10);
             model_builder.Entity<Celebrity>().Property(p => p.ReqPhotoPath).IsRequired().HasMaxLength(200);
 
             model_builder.Entity<Liveevent>().ToTable("Liveevents").HasKey(p => p.Id);
