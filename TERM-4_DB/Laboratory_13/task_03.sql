@@ -1,24 +1,28 @@
+-- Изменение процедуры для вставки в временную таблицу результата --
+
 USE [UNIVER]
 GO
 
 ALTER PROCEDURE [dbo].[PSUBJECT]
     @p varchar(20) = NULL
-AS 
-BEGIN 
+AS BEGIN 
     SET NOCOUNT ON;
 
-    IF @p IS NULL 
-    BEGIN
-        SELECT SUBJECT, SUBJECT_NAME, PULPIT FROM SUBJECT;
+    IF @p IS NULL begin
+        SELECT * 
+            FROM SUBJECT;
     END
-    ELSE 
-    BEGIN
-        SELECT SUBJECT, SUBJECT_NAME, PULPIT FROM SUBJECT WHERE PULPIT = @p;
+    ELSE begin
+        SELECT * 
+            FROM SUBJECT WHERE PULPIT = @p;
     END
 END;
 GO
 
-IF OBJECT_ID('tempdb..#SUBJECT') IS NOT NULL DROP TABLE #SUBJECT; 
+set nocount on;
+
+IF OBJECT_ID('tempdb..#SUBJECT') IS NOT NULL
+    DROP TABLE #SUBJECT; 
 
 CREATE TABLE #SUBJECT
 (
@@ -29,6 +33,7 @@ CREATE TABLE #SUBJECT
 
 INSERT INTO #SUBJECT
     EXEC [dbo].[PSUBJECT] @p = NULL; 
-
-PRINT 'Содержимое временной таблицы #SUBJECT:';
-SELECT * FROM #SUBJECT;
+    
+print('Содержимое временной таблицы SUBJECT:');
+SELECT * 
+    FROM #SUBJECT;

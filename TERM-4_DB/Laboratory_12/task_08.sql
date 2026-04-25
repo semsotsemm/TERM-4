@@ -1,32 +1,37 @@
-USE UNIVER;
-GO
+use UNIVER;
+go
 
+set nocount on;
 
-PRINT 'Начальный уровень вложенности: ' + CAST(@@TRANCOUNT AS VARCHAR);
+print('Уровень вложенности c начала: ' + CAST(@@TRANCOUNT as varchar));
 
 BEGIN TRANSACTION OuterTran;
-    PRINT 'Открыта внешняя транзакция. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
+    print('Внешняя транзакция: ' + CAST(@@TRANCOUNT as varchar));
 
     INSERT INTO PULPIT (PULPIT, PULPIT_NAME, FACULTY)
-    VALUES ('ИТС', 'Информационные технологии в строительстве', 'ИТ');
+                Values ('ИТС', 'Информационные технологии и системы', 'ИТ');
 
     BEGIN TRANSACTION InnerTran;
-        PRINT 'Открыта вложенная транзакция. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
+        print('Открыта вложенная транзакция: ' + CAST(@@TRANCOUNT as varchar));
 
         INSERT INTO AUDITORIUM (AUDITORIUM, AUDITORIUM_TYPE, AUDITORIUM_CAPACITY, AUDITORIUM_NAME)
-        VALUES ('100-1', 'ЛК', 50, 'Вложенная аудитория');
+                        Values ('100-1', 'ЛК', 50, 'Вложенная аудитория');
 
         COMMIT TRANSACTION InnerTran;
-        PRINT 'Выполнен COMMIT вложенной транзакции. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
+        print('Выполнен commit вложенной транзакции: ' + CAST(@@TRANCOUNT as varchar));
 
-    SELECT * FROM PULPIT WHERE PULPIT = 'ИТС';
-    SELECT * FROM AUDITORIUM WHERE AUDITORIUM = '100-1';
+    SELECT * 
+        FROM PULPIT WHERE PULPIT = 'ИТС';
+    SELECT * 
+        FROM AUDITORIUM WHERE AUDITORIUM = '100-1';
 
-PRINT 'Откатываем ВНЕШНЮЮ транзакцию...';
+print('Откатываем внешнюю транзакцию');
 ROLLBACK TRANSACTION OuterTran; 
 
-PRINT 'После ROLLBACK внешней транзакции. @@TRANCOUNT = ' + CAST(@@TRANCOUNT AS VARCHAR);
+print('После rollback внешней транзакции: ' + CAST(@@TRANCOUNT as varchar));
 
-SELECT 'Кафедра' as Entity, PULPIT FROM PULPIT WHERE PULPIT = 'ИТС'
+SELECT 'Кафедра' as Entity, PULPIT 
+    FROM PULPIT WHERE PULPIT = 'ИТС'
 UNION ALL
-SELECT 'Аудитория', AUDITORIUM FROM AUDITORIUM WHERE AUDITORIUM = '100-1';
+SELECT 'Аудитория', AUDITORIUM 
+    FROM AUDITORIUM WHERE AUDITORIUM = '100-1';

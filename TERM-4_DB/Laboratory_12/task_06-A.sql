@@ -1,18 +1,16 @@
-USE UNIVER;
-go
+-- Фантомное чтение REPEATABLE READ -- 
+use UNIVER;
+
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
+DECLARE @quantity_aud int;
+
 BEGIN TRAN;
+    set @quantity_aud = (SELECT COUNT(*) FROM AUDITORIUM WHERE AUDITORIUM_TYPE = 'ЛК');
+    print('Количество лекционных аудиторий до изменений: ' +  cast(@quantity_aud as varchar(3)));
 
-SELECT AUDITORIUM, AUDITORIUM_CAPACITY FROM AUDITORIUM WHERE AUDITORIUM = '301-1';
+    WAITFOR DELAY '00:00:10';
 
-WAITFOR DELAY '00:00:10';
-
-SELECT AUDITORIUM, AUDITORIUM_CAPACITY FROM AUDITORIUM WHERE AUDITORIUM = '301-1';
-SELECT COUNT(*) as [Count_Before] FROM AUDITORIUM WHERE AUDITORIUM_TYPE = 'ЛК';
-
-WAITFOR DELAY '00:00:10';
-
-SELECT COUNT(*) as [Count_After] FROM AUDITORIUM WHERE AUDITORIUM_TYPE = 'ЛК';
-
+    set @quantity_aud = (SELECT COUNT(*) FROM AUDITORIUM WHERE AUDITORIUM_TYPE = 'ЛК');
+    print('Количество лекционных аудиторий после изменений: ' +  cast(@quantity_aud as varchar(3)));
 COMMIT;

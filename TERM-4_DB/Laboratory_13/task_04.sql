@@ -1,3 +1,5 @@
+-- Процедура для вставки аудиторий -- 
+
 USE UNIVER;
 GO
 
@@ -12,7 +14,7 @@ BEGIN
         INSERT INTO AUDITORIUM (AUDITORIUM, AUDITORIUM_NAME, AUDITORIUM_CAPACITY, AUDITORIUM_TYPE)
         VALUES (@a, @n, @c, @t);
 
-        RETURN 1;
+        return 1;
     END TRY
     BEGIN CATCH
         PRINT '--- ОШИБКА ПРИ ВСТАВКЕ ---';
@@ -20,14 +22,13 @@ BEGIN
         PRINT 'Уровень серьезности: ' + CAST(ERROR_SEVERITY() AS VARCHAR(10));
         PRINT 'Сообщение: ' + ERROR_MESSAGE();
         
-        RETURN -1;
+        return -1;
     END CATCH
 END;
 GO
 
-USE UNIVER;
-GO
 
+-- Норм вставка -- 
 CREATE OR ALTER PROCEDURE PAUDITORIUM_INSERT
     @a CHAR(20),            
     @n VARCHAR(50),         
@@ -47,11 +48,12 @@ BEGIN
         PRINT 'Уровень серьезности: ' + CAST(ERROR_SEVERITY() AS VARCHAR(10));
         PRINT 'Сообщение: ' + ERROR_MESSAGE();
         
-        RETURN -1;
+        return -1;
     END CATCH
 END;
 GO
 
+-- Плохая вставка --
 
 DECLARE @res INT;
 EXEC @res = PAUDITORIUM_INSERT 
