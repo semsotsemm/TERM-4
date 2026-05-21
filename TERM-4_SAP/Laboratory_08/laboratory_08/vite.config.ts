@@ -1,15 +1,11 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import { defineConfig } from 'vite'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
 
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    // TanStack Router plugin — авто-генерирует routeTree.gen.ts из src/routes/
-    TanStackRouterVite({
-      routesDirectory: "./src/routes",
-      generatedRouteTree: "./src/routeTree.gen.ts",
-      quoteStyle: "double",
-    }),
     react(),
+    babel({ presets: [reactCompilerPreset()] })
   ],
-});
+})

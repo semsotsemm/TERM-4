@@ -1,4 +1,5 @@
 using ANC25_WEBAPI_DLL;
+using Microsoft.Extensions.Options;
 
 
 namespace DAL_Celebrity;
@@ -15,6 +16,12 @@ public partial class Program
         builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
+
+        {
+            var cfg = app.Services.GetRequiredService<IOptions<CelebritiesConfig>>().Value;
+            new Init(cfg.ConnectionString);
+            Init.Execute(delete: false, create: true);
+        }
 
         app.UseHttpsRedirection();
 

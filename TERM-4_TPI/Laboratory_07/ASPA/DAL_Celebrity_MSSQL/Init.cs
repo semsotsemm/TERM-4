@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using static DAL_Celebrity.DAL_Celebrity_MSSQL;
 
@@ -13,12 +14,48 @@ namespace DAL_Celebrity
         public Init() { }
         public Init(string conn) { connstring = conn; }
 
+        // Проверяет наличие БД через запрос к master — надёжнее, чем EnsureCreated
+        private static bool DatabaseExists(string connectionString)
+        {
+            var csb = new SqlConnectionStringBuilder(connectionString);
+            string dbName = csb.InitialCatalog;
+            csb.InitialCatalog = "master";
+            try
+            {
+                using var conn = new SqlConnection(csb.ConnectionString);
+                conn.Open();
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT COUNT(*) FROM sys.databases WHERE name = @name";
+                cmd.Parameters.AddWithValue("@name", dbName);
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+            catch { return false; }
+        }
+
         public static void Execute(bool delete = true, bool create = true)
         {
             using (Context context = new Context(connstring))
             {
-                if (delete) context.Database.EnsureDeleted();
-                if (create) context.Database.EnsureCreated();
+                if (delete)
+                    context.Database.EnsureDeleted();
+
+                if (create && !DatabaseExists(connstring))
+                    context.Database.EnsureCreated();   // создаём БД + схему только если не существует
+
+                // Заполняем только если таблица пуста
+                try
+                {
+                    if (context.Celebrities.Any())
+                    {
+                        Console.WriteLine("Данные уже существуют, заполнение пропущено.");
+                        return;
+                    }
+                }
+                catch
+                {
+                    // Таблицы ещё не готовы — пропускаем заполнение
+                    return;
+                }
 
                 Func<string, string> puri = (string f) => $"{f}";
 

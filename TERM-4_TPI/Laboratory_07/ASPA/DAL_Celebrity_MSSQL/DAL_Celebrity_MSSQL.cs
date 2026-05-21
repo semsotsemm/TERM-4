@@ -191,7 +191,11 @@ public class DAL_Celebrity_MSSQL
                 this.ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=CelebrityDB;Trusted_Connection=True;TrustServerCertificate=True;";
             }
 
-            option_builder.UseSqlServer(this.ConnectionString);
+            option_builder.UseSqlServer(this.ConnectionString,
+                sqlOptions => sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null));
         }
 
         protected override void OnModelCreating(ModelBuilder model_builder)

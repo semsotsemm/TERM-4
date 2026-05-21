@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Форма товара — ShopLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1714;
+    --ink-2: #4a4642;
+    --ink-3: #8a8480;
+    --cream: #f7f4ef;
+    --cream-2: #ede9e2;
+    --cream-3: #ddd8ce;
+    --accent: #c84b2f;
+    --accent-hover: #a83820;
+    --accent-light: #f9ece8;
+    --border: #d4cfc7;
+    --white: #ffffff;
+    --error: #c84b2f;
+    --success: #2d7a4f;
+    --success-bg: #eaf4ee;
+    --shadow-lg: 0 16px 60px rgba(26,23,20,0.22);
+    --radius: 4px;
+    --radius-lg: 12px;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --tr: 0.18s ease;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── OVERLAY ── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,23,20,0.52);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 200;
+    backdrop-filter: blur(2px);
+    animation: overlay-in 0.2s ease;
+  }
+  @keyframes overlay-in { from { opacity:0 } to { opacity:1 } }
+
+  /* ── MODAL ── */
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: modal-in 0.25s cubic-bezier(0.34,1.4,0.64,1);
+    position: relative;
+  }
+  @keyframes modal-in {
+    from { transform: translateY(24px) scale(0.97); opacity:0 }
+    to { transform: translateY(0) scale(1); opacity:1 }
+  }
+
+  .modal-header {
+    padding: 1.5rem 1.75rem 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .modal-header-left {}
+  .modal-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 0.25rem 0.65rem;
+    border-radius: 100px;
+    margin-bottom: 0.6rem;
+  }
+  .modal-mode-badge.edit-mode { color: var(--success); background: var(--success-bg); }
+  .modal-mode-badge svg { width: 11px; height: 11px; }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .btn-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all var(--tr);
+    flex-shrink: 0;
+    color: var(--ink-2);
+  }
+  .btn-close:hover { background: var(--cream-2); color: var(--ink); }
+  .btn-close svg { width: 14px; height: 14px; }
+
+  .modal-divider {
+    height: 1px;
+    background: var(--cream-3);
+    margin: 1.25rem 1.75rem 0;
+  }
+
+  /* ── FORM ── */
+  .modal-body { padding: 1.5rem 1.75rem; }
+
+  .form-section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .form-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cream-3);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-grid .span-2 { grid-column: 1 / -1; }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .form-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .required-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .form-input, .form-select, .form-textarea {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color var(--tr), background var(--tr), box-shadow var(--tr);
+    -webkit-appearance: none;
+  }
+  .form-input, .form-select { padding: 0.65rem 0.9rem; }
+  .form-textarea {
+    padding: 0.65rem 0.9rem;
+    resize: vertical;
+    min-height: 80px;
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--ink-3); }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--accent);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(200,75,47,0.1);
+  }
+  .form-input.error, .form-select.error, .form-textarea.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 3px rgba(200,75,47,0.1);
+  }
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8480' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    padding-right: 2.2rem;
+    cursor: pointer;
+  }
+
+  .field-error {
+    font-size: 0.75rem;
+    color: var(--error);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .field-error svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .field-hint {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+
+  /* ── INPUT WITH ADDON ── */
+  .input-addon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-addon {
+    position: absolute;
+    left: 0.9rem;
+    color: var(--ink-3);
+    font-size: 0.9rem;
+    font-weight: 500;
+    pointer-events: none;
+    user-select: none;
+  }
+  .input-addon-wrap .form-input { padding-left: 1.7rem; }
+  .input-addon-right {
+    position: absolute;
+    right: 0.9rem;
+    color: var(--ink-3);
+    font-size: 0.78rem;
+    pointer-events: none;
+  }
+
+  /* ── DRAG DROP IMAGE ── */
+  .img-upload {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--tr), background var(--tr);
+    position: relative;
+    overflow: hidden;
+  }
+  .img-upload:hover { border-color: var(--accent); background: var(--accent-light); }
+  .img-upload input { position: absolute; inset:0; opacity:0; cursor:pointer; }
+  .img-upload-icon { color: var(--ink-3); margin-bottom: 0.5rem; }
+  .img-upload-icon svg { width: 28px; height: 28px; }
+  .img-upload-text { font-size: 0.82rem; color: var(--ink-2); }
+  .img-upload-hint { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.2rem; }
+
+  /* ── VALIDATION SUMMARY ── */
+  .validation-summary {
+    background: var(--accent-light);
+    border: 1.5px solid rgba(200,75,47,0.25);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .validation-summary.visible { display: block; }
+  .validation-summary-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .validation-summary-title svg { width: 13px; height: 13px; }
+  .validation-list {
+    list-style: none;
+    padding: 0;
+    font-size: 0.8rem;
+    color: var(--error);
+    line-height: 1.8;
+  }
+  .validation-list li::before { content: '— '; }
+
+  /* ── MODAL FOOTER ── */
+  .modal-footer {
+    padding: 1.25rem 1.75rem;
+    border-top: 1px solid var(--cream-3);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  .btn-cancel {
+    padding: 0.65rem 1.2rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--tr);
+  }
+  .btn-cancel:hover { background: var(--cream-2); border-color: var(--ink-3); color: var(--ink); }
+
+  .btn-submit {
+    padding: 0.65rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background var(--tr), transform var(--tr);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-submit:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit.loading { opacity: 0.7; pointer-events: none; }
+  .btn-submit svg { width: 15px; height: 15px; }
+
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── DEMO BG ── */
+  body::before {
+    content: 'Каталог — демо страница за модалью';
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    z-index: 0;
+  }
+
+  @media (max-width: 640px) {
+    .modal { border-radius: var(--radius-lg) var(--radius-lg) 0 0; align-self: flex-end; }
+    .overlay { align-items: flex-end; padding: 0; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── OVERLAY + MODAL ── -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-mode-badge" id="mode-badge">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Новый товар
+        </div>
+        <h2 class="modal-title" id="modal-title">Добавить товар</h2>
+      </div>
+      <button class="btn-close" onclick="closeModal()" aria-label="Закрыть">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-divider"></div>
+
+    <!-- Body -->
+    <div class="modal-body">
+
+      <!-- Validation summary (Zod errors) -->
+      <div class="validation-summary" id="val-summary">
+        <div class="validation-summary-title">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5v3M7 9.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Исправьте ошибки валидации:
+        </div>
+        <ul class="validation-list" id="val-list"></ul>
+      </div>
+
+      <form id="product-form" novalidate>
+
+        <!-- Basic info -->
+        <div class="form-section-label">Основная информация</div>
+        <div class="form-grid">
+          <div class="form-group span-2">
+            <label class="form-label" for="f-title">
+              <span class="required-dot"></span> Название товара
+            </label>
+            <input class="form-input" type="text" id="f-title" placeholder="напр. iPhone 14 Pro 256GB" minlength="3">
+            <span class="field-error" id="f-title-err"></span>
+          </div>
+
+          <div class="form-group span-2">
+            <label class="form-label" for="f-description">Описание</label>
+            <textarea class="form-textarea" id="f-description" placeholder="Краткое описание товара..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-category">
+              <span class="required-dot"></span> Категория
+            </label>
+            <select class="form-select" id="f-category">
+              <option value="">Выберите категорию</option>
+              <option>Смартфоны</option>
+              <option>Ноутбуки</option>
+              <option>Аудио</option>
+              <option>Умные часы</option>
+              <option>Планшеты</option>
+              <option>Телевизоры</option>
+              <option>Красота</option>
+              <option>Одежда</option>
+              <option>Ювелирные</option>
+              <option>Другое</option>
+            </select>
+            <span class="field-error" id="f-category-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-brand">Бренд</label>
+            <input class="form-input" type="text" id="f-brand" placeholder="напр. Apple">
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="form-section-label">Цена и наличие</div>
+        <div class="form-grid" style="margin-bottom: 1.5rem;">
+          <div class="form-group">
+            <label class="form-label" for="f-price">
+              <span class="required-dot"></span> Цена
+            </label>
+            <div class="input-addon-wrap">
+              <span class="input-addon">$</span>
+              <input class="form-input" type="number" id="f-price" placeholder="0.00" min="0.01" step="0.01">
+            </div>
+            <span class="field-error" id="f-price-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-discount">Скидка</label>
+            <div class="input-addon-wrap">
+              <input class="form-input" type="number" id="f-discount" placeholder="0" min="0" max="100">
+              <span class="input-addon-right">%</span>
+            </div>
+            <span class="field-hint">От 0 до 100%</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-stock">Остаток на складе</label>
+            <input class="form-input" type="number" id="f-stock" placeholder="0" min="0">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="f-sku">Артикул (SKU)</label>
+            <input class="form-input" type="text" id="f-sku" placeholder="PROD-001">
+          </div>
+        </div>
+
+        <!-- Image -->
+        <div class="form-section-label">Изображение</div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label class="form-label" for="f-thumbnail">URL обложки</label>
+          <input class="form-input" type="url" id="f-thumbnail" placeholder="https://...">
+          <span class="field-hint">Или загрузите файл ниже</span>
+        </div>
+        <div class="img-upload" style="margin-bottom:1.5rem;">
+          <input type="file" accept="image/*">
+          <div class="img-upload-icon">
+            <svg viewBox="0 0 28 28" fill="none"><path d="M14 18V8M14 8L10 12M14 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="3" width="22" height="22" rx="3" stroke="currentColor" stroke-width="1.3"/></svg>
+          </div>
+          <div class="img-upload-text">Перетащите файл сюда или <span style="color:var(--accent);">выберите</span></div>
+          <div class="img-upload-hint">PNG, JPG, WEBP — до 5 МБ</div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-submit" id="submit-btn" onclick="submitForm()">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M13 4L6 11l-3-3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Сохранить товар
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* Demo: prefill for EDIT mode */
+  const IS_EDIT = false; /* change to true to see Edit UI */
+
+  if (IS_EDIT) {
+    document.getElementById('mode-badge').textContent = '✏ Редактирование';
+    document.getElementById('mode-badge').classList.add('edit-mode');
+    document.getElementById('modal-title').textContent = 'Редактировать товар';
+    document.getElementById('submit-btn').textContent = 'Обновить товар';
+    document.getElementById('f-title').value = 'iPhone 14 Pro Max 256GB';
+    document.getElementById('f-price').value = '999';
+    document.getElementById('f-category').value = 'Смартфоны';
+    document.getElementById('f-brand').value = 'Apple';
+    document.getElementById('f-stock').value = '42';
+    document.getElementById('f-discount').value = '5';
+  }
+
+  /* ── VALIDATION (mirrors Zod logic) ── */
+  function validateProduct(data) {
+    const errors = {};
+    if (!data.title || data.title.trim().length < 3) {
+      errors.title = 'title: Название слишком короткое (минимум 3 символа)';
+    }
+    if (!data.price || isNaN(data.price) || Number(data.price) <= 0) {
+      errors.price = 'price: Цена должна быть числом больше 0';
+    }
+    if (!data.category) {
+      errors.category = 'category: Выберите категорию товара';
+    }
+    return errors;
+  }
+
+  function setError(id, msg) {
+    const err = document.getElementById(id + '-err');
+    const inp = document.getElementById(id);
+    if (err) err.innerHTML = msg ? `<svg viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 3v2.5M5.5 7.5v.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>${msg}` : '';
+    if (inp) inp.classList.toggle('error', !!msg);
+  }
+
+  function clearAllErrors() {
+    ['f-title', 'f-price', 'f-category'].forEach(id => setError(id, ''));
+    document.getElementById('val-summary').classList.remove('visible');
+    document.getElementById('val-list').innerHTML = '';
+  }
+
+  function submitForm() {
+    clearAllErrors();
+
+    const data = {
+      title: document.getElementById('f-title').value,
+      price: document.getElementById('f-price').value,
+      category: document.getElementById('f-category').value,
+    };
+
+    /* Mirror of Zod safeParse + flatten */
+    const errors = validateProduct(data);
+    const keys = Object.keys(errors);
+
+    if (keys.length > 0) {
+      /* Show summary */
+      const summary = document.getElementById('val-summary');
+      const list = document.getElementById('val-list');
+      summary.classList.add('visible');
+      list.innerHTML = keys.map(k => `<li>${errors[k]}</li>`).join('');
+
+      /* Show inline */
+      if (errors.title) setError('f-title', errors.title.split(': ')[1]);
+      if (errors.price) setError('f-price', errors.price.split(': ')[1]);
+      if (errors.category) setError('f-category', errors.category.split(': ')[1]);
+      return;
+    }
+
+    /* Simulate POST/PUT */
+    const btn = document.getElementById('submit-btn');
+    btn.classList.add('loading');
+    btn.innerHTML = '<div class="spinner"></div> Сохранение...';
+
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none"><path d="M13 4L6 11l-3-3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Сохранить товар';
+      alert('✅ Успех! Здесь будет dispatch({ type: "ADD_PRODUCT", payload: product })');
+    }, 1200);
+  }
+
+  function closeModal() {
+    document.getElementById('overlay').style.opacity = '0';
+    document.getElementById('overlay').style.transition = 'opacity 0.2s';
+    setTimeout(() => document.getElementById('overlay').style.display = 'none', 200);
+  }
+
+  /* Close on backdrop click */
+  document.getElementById('overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  /* Close on Escape */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

@@ -43,7 +43,6 @@ namespace ASPA008_1.Filters
                 }
             }
             catch {
-                /* Wikipedia недоступна — возвращаем пустой словарь */ 
             }
 
             return info.WikiReferens;

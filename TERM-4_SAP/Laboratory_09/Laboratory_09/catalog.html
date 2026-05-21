@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Каталог — ShopLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1714;
+    --ink-2: #4a4642;
+    --ink-3: #8a8480;
+    --cream: #f7f4ef;
+    --cream-2: #ede9e2;
+    --cream-3: #ddd8ce;
+    --accent: #c84b2f;
+    --accent-hover: #a83820;
+    --accent-light: #f9ece8;
+    --border: #d4cfc7;
+    --white: #ffffff;
+    --success: #2d7a4f;
+    --success-bg: #eaf4ee;
+    --warning: #8a5c10;
+    --warning-bg: #fdf3e0;
+    --shadow-sm: 0 1px 4px rgba(26,23,20,0.06);
+    --shadow: 0 2px 12px rgba(26,23,20,0.09);
+    --shadow-lg: 0 8px 32px rgba(26,23,20,0.13);
+    --radius: 4px;
+    --radius-lg: 10px;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --tr: 0.18s ease;
+    --header-h: 64px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: var(--white);
+    border-bottom: 1px solid var(--cream-3);
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    gap: 1.5rem;
+    z-index: 100;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .brand-mark {
+    width: 32px; height: 32px;
+    background: var(--ink);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-mark svg { width: 17px; height: 17px; }
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .header-search {
+    flex: 1;
+    max-width: 420px;
+    position: relative;
+  }
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%; transform: translateY(-50%);
+    color: var(--ink-3);
+    pointer-events: none;
+  }
+  .search-icon svg { width: 16px; height: 16px; }
+  .header-search input {
+    width: 100%;
+    padding: 0.55rem 1rem 0.55rem 2.4rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    outline: none;
+    color: var(--ink);
+    transition: border-color var(--tr), box-shadow var(--tr);
+  }
+  .header-search input::placeholder { color: var(--ink-3); }
+  .header-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,75,47,0.1);
+    background: var(--white);
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+    border-radius: 100px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+  .user-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .btn-logout {
+    padding: 0.45rem 0.9rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color var(--tr), color var(--tr), background var(--tr);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .btn-logout:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .btn-logout svg { width: 14px; height: 14px; }
+
+  .btn-add {
+    padding: 0.5rem 1.1rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background var(--tr), transform var(--tr);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .btn-add:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn-add svg { width: 15px; height: 15px; }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-top: var(--header-h);
+    padding: 2rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .page-header {
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .page-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-top: 2rem;
+  }
+  .product-count {
+    font-size: 0.875rem;
+    color: var(--ink-3);
+    background: var(--cream-2);
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    margin-top: 2rem;
+  }
+
+  .filters-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 0.4rem 0.85rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    background: var(--white);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all var(--tr);
+  }
+  .filter-btn:hover { border-color: var(--ink-2); color: var(--ink); }
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--white);
+  }
+
+  /* ── SKELETON LOADER ── */
+  .skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .skeleton-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--cream-3);
+  }
+  .skeleton-img {
+    height: 200px;
+    background: linear-gradient(90deg, var(--cream-2) 25%, var(--cream-3) 50%, var(--cream-2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+  .skeleton-body { padding: 1rem; }
+  .skeleton-line {
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--cream-2) 25%, var(--cream-3) 50%, var(--cream-2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    margin-bottom: 0.6rem;
+  }
+  .skeleton-line.short { width: 60%; }
+  .skeleton-line.xs { width: 40%; margin-bottom: 0; }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── PRODUCT GRID ── */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .product-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--cream-3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow var(--tr), transform var(--tr), border-color var(--tr);
+    position: relative;
+  }
+  .product-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+    border-color: var(--cream-2);
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 0.75rem; left: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .card-badge.new { background: var(--ink); color: var(--white); }
+  .card-badge.sale { background: var(--accent); color: var(--white); }
+
+  .card-img-wrap {
+    height: 200px;
+    background: var(--cream);
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .card-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+  .product-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+  .card-body {
+    padding: 1rem 1rem 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .card-category {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.2rem;
+  }
+  .stars { color: #e8a528; font-size: 0.8rem; letter-spacing: -1px; }
+  .rating-num { font-size: 0.78rem; color: var(--ink-3); }
+
+  .card-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.6rem;
+  }
+  .card-price {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .card-price-old {
+    font-size: 0.82rem;
+    color: var(--ink-3);
+    text-decoration: line-through;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+  }
+  .btn-edit {
+    flex: 1;
+    padding: 0.55rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--tr);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .btn-edit:hover { background: var(--cream-2); border-color: var(--ink-3); color: var(--ink); }
+  .btn-edit svg { width: 13px; height: 13px; }
+
+  .btn-delete {
+    padding: 0.55rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-light);
+    border: 1.5px solid rgba(200,75,47,0.2);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--tr);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .btn-delete:hover { background: var(--accent); color: var(--white); }
+  .btn-delete svg { width: 13px; height: 13px; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    grid-column: 1 / -1;
+  }
+  .empty-icon {
+    width: 72px; height: 72px;
+    background: var(--cream-2);
+    border-radius: 50%;
+    margin: 0 auto 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .empty-icon svg { width: 32px; height: 32px; color: var(--ink-3); }
+  .empty-state h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .empty-state p { font-size: 0.9rem; color: var(--ink-3); }
+
+  /* ── TOAST ── */
+  .toast-container {
+    position: fixed;
+    bottom: 1.5rem; right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 1000;
+  }
+  .toast {
+    background: var(--ink);
+    color: var(--white);
+    padding: 0.75rem 1.1rem;
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: var(--shadow-lg);
+    animation: toast-in 0.25s ease;
+  }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--accent); }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; }
+  @keyframes toast-in {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @media (max-width: 600px) {
+    .main { padding: 1rem; }
+    .header { padding: 0 1rem; }
+    .header-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+  <a href="#" class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 20 20" fill="none">
+        <rect x="2" y="5" width="16" height="11" rx="1.5" stroke="white" stroke-width="1.5"/>
+        <path d="M7 5V4a3 3 0 016 0v1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="10" cy="10.5" r="1.5" fill="white"/>
+      </svg>
+    </div>
+    <span class="brand-name">ShopLab</span>
+  </a>
+
+  <div class="header-search">
+    <span class="search-icon">
+      <svg viewBox="0 0 16 16" fill="none">
+        <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <input type="search" placeholder="Поиск по товарам...">
+  </div>
+
+  <div class="header-right">
+    <div class="user-pill">
+      <div class="user-avatar">ИИ</div>
+      Иван Иванов
+    </div>
+
+    <button class="btn-logout" onclick="handleLogout()">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M6 8h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Выйти
+    </button>
+
+    <button class="btn-add" onclick="openModal()">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M8 3v10M3 8h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Добавить товар
+    </button>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="main" style="margin-top: calc(var(--header-h) + 0px);">
+  <div class="page-header">
+    <h1 class="page-title">Каталог</h1>
+    <span class="product-count" id="count-label">Загрузка...</span>
+  </div>
+
+  <div class="filters-bar">
+    <button class="filter-btn active">Все категории</button>
+    <button class="filter-btn">Электроника</button>
+    <button class="filter-btn">Одежда</button>
+    <button class="filter-btn">Красота</button>
+    <button class="filter-btn">Ювелирные</button>
+    <button class="filter-btn">Другое</button>
+  </div>
+
+  <!-- Skeleton loader (shown while loading) -->
+  <div class="skeleton-grid" id="skeleton">
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line xs"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line xs"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line xs"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line xs"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line xs"></div></div></div>
+    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line xs"></div></div></div>
+  </div>
+
+  <!-- Product grid (rendered by React) -->
+  <div class="product-grid" id="product-grid" style="display:none;"></div>
+</main>
+
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-container" id="toasts"></div>
+
+<script>
+  /* Demo: simulate loading then render mock products */
+  const MOCK = [
+    { id:1, title:'iPhone 14 Pro Max 256GB', price:999, category:'smartphones', rating:4.9, thumbnail:'https://dummyjson.com/image/300x200/1a1714/f7f4ef?text=iPhone&fontSize=22' },
+    { id:2, title:'MacBook Air M2 Midnight', price:1299, category:'laptops', rating:4.8, thumbnail:'https://dummyjson.com/image/300x200/c84b2f/ffffff?text=MacBook&fontSize=20' },
+    { id:3, title:'Samsung Galaxy S23 Ultra', price:799, category:'smartphones', rating:4.7, thumbnail:'https://dummyjson.com/image/300x200/2d7a4f/ffffff?text=Samsung&fontSize=18' },
+    { id:4, title:'Sony WH-1000XM5 Headphones', price:349, category:'audio', rating:4.9, thumbnail:'https://dummyjson.com/image/300x200/4a4642/f7f4ef?text=Sony&fontSize=22' },
+    { id:5, title:'Apple Watch Series 8 GPS', price:399, category:'smartwatches', rating:4.6, thumbnail:'https://dummyjson.com/image/300x200/8a5c10/ffffff?text=Watch&fontSize=22' },
+    { id:6, title:'iPad Pro 12.9" M2', price:1099, category:'tablets', rating:4.8, thumbnail:'https://dummyjson.com/image/300x200/185fa5/ffffff?text=iPad&fontSize=22' },
+  ];
+
+  function renderProducts(products) {
+    const grid = document.getElementById('product-grid');
+    document.getElementById('count-label').textContent = `${products.length} товаров`;
+    if (!products.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 32 32" fill="none"><rect x="4" y="8" width="24" height="19" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M11 8V7a5 5 0 0110 0v1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3>Товары не найдены</h3><p>Попробуйте изменить фильтры или добавить новый товар</p></div>`;
+      return;
+    }
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card" style="animation:fadeUp .3s ease ${i*0.05}s both">
+        ${i === 0 ? '<span class="card-badge new">Новинка</span>' : ''}
+        ${i === 2 ? '<span class="card-badge sale">−20%</span>' : ''}
+        <div class="card-img-wrap">
+          <img src="${p.thumbnail}" alt="${p.title}" loading="lazy">
+        </div>
+        <div class="card-body">
+          <span class="card-category">${p.category}</span>
+          <h3 class="card-title">${p.title}</h3>
+          <div class="card-rating">
+            <span class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
+            <span class="rating-num">${p.rating}</span>
+          </div>
+          <div class="card-price-row">
+            <span class="card-price">$${p.price}</span>
+            ${i === 2 ? `<span class="card-price-old">$${Math.round(p.price*1.25)}</span>` : ''}
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-edit" onclick="editProduct(${p.id})">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M9.5 1.5l3 3-8 8H1.5v-3l8-8z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            Изменить
+          </button>
+          <button class="btn-delete" onclick="deleteProduct(${p.id}, this)">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 3.5h10M5 3.5V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5v1M5.5 6v4M8.5 6v4M3 3.5l.75 8.5h6.5L11 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function deleteProduct(id, btn) {
+    const card = btn.closest('.product-card');
+    card.style.opacity = '0.4';
+    card.style.pointerEvents = 'none';
+    setTimeout(() => {
+      card.style.transition = 'all .3s';
+      card.style.transform = 'scale(0.92)';
+      card.style.opacity = '0';
+      setTimeout(() => card.remove(), 300);
+      showToast('Товар удалён', 'success');
+    }, 200);
+  }
+
+  function editProduct(id) { showToast('Открытие формы редактирования...'); }
+  function openModal() { showToast('Открытие формы добавления...'); }
+  function handleLogout() { showToast('Выход из системы...'); }
+
+  function showToast(msg, type = '') {
+    const container = document.getElementById('toasts');
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    const icon = type === 'success'
+      ? '<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5"/><path d="M8 5v3M8 10.5v.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    t.innerHTML = icon + msg;
+    container.appendChild(t);
+    setTimeout(() => t.remove(), 2800);
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  /* Simulate API loading */
+  setTimeout(() => {
+    document.getElementById('skeleton').style.display = 'none';
+    document.getElementById('product-grid').style.display = 'grid';
+    renderProducts(MOCK);
+  }, 900);
+
+  const style = document.createElement('style');
+  style.textContent = '@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }';
+  document.head.appendChild(style);
+</script>
+</body>
+</html>

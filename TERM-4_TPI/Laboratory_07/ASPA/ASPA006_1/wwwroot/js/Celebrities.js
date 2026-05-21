@@ -5,7 +5,6 @@ async function loadCelebrities() {
         const response = await fetch('/api/Celebrities/data'); 
         const celebrities = await response.json();
         
-        console.log("Данные из БД:", celebrities);
         renderGrid(celebrities); 
     } catch (error) {
         console.error("Ошибка загрузки данных:", error);
