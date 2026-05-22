@@ -1,0 +1,41 @@
+use UNIVER;
+go
+
+CREATE or ALTER Trigger TR_TEACHER_DEL_TRAN_TEST on TEACHER after DELETE as
+BEGIN
+    SET NOCOUNT ON;
+    
+    INSERT into TR_AUDIT(STMT, TRNAME, CC)
+    SELECT 'DEL', 'TR_TEACHER_DEL_TRAN_TEST', CONCAT('”‰‡ÎÂÌ ÍÓ‰: ', TEACHER)
+        FROM deleted;
+END;
+go
+
+DELETE FROM TR_AUDIT;
+DELETE FROM TEACHER WHERE TEACHER = '“—“1';
+
+INSERT INTO TEACHER(TEACHER, TEACHER_NAME, GENDER, PULPIT)
+            Values ('“—“1', '“ÂÒÚ', 'Ï', '»—Ë“');
+go
+
+BEGIN TRANSACTION;
+
+    DELETE FROM TEACHER 
+        WHERE TEACHER = '“—“1';
+
+    SELECT * 
+        FROM TEACHER WHERE TEACHER = '“—“1';
+    SELECT * 
+        FROM TR_AUDIT;                       
+
+ROLLBACK TRANSACTION;
+go
+
+
+SELECT * 
+    FROM TEACHER 
+    WHERE TEACHER = '“—“1';
+
+SELECT * 
+    FROM TR_AUDIT;
+go
